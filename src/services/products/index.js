@@ -25,10 +25,17 @@ router.get('/', async(req,res)=>{
     const response = await db.query(baseQuery, params);
     res.send(response.rows);
 })
-
+//SEARCH
+router.get('/search/:name', async(req,res)=>{
+    const search = await db.query(`SELECT * FROM products WHERE name LIKE $1 `,["%" + req.params.name + "%" ]);
+    console.log(search)
+    if(search){
+        res.send(search.rows);
+    }
+})
 //BY ID
 router.get('/:id',async(req,res)=>{
-    const response = await db.query(`SELECT * FROM products WHERE _id =$1`,[req.params.id]);
+    const response = await db.query(`SELECT * FROM products WHERE _id = $1 `,[req.params.id]);
     res.send(response.rows[0]);
 })
 //POST
